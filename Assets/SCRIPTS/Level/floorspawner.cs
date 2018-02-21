@@ -8,6 +8,8 @@ public class floorspawner : MonoBehaviour {
     public float timetospawn=0;
     public float spawn;
     float rand;
+    public int holeaccumulator = 0,rand2=0,holeemptier=0;
+    public bool hole = false;
     // Update is called once per frame
     void Start()
     {
@@ -20,20 +22,52 @@ public class floorspawner : MonoBehaviour {
         timetospawn -= Time.deltaTime;
         if (timetospawn < 0.1f)
         {
-           rand = Random.Range(0f, 3f);
-            if (rand <= 1f)
+           if(hole!=true)
             {
-                Instantiate(floor, floorpos.position, floorpos.rotation);
+                rand = Random.Range(0f, 3f);
+                if (rand <= 1f)
+                {
+                    Instantiate(floor, floorpos.position, floorpos.rotation);
+                }
+                if (rand > 1f && rand <= 2f)
+                {
+                    Instantiate(floor2, floorpos.position, floorpos.rotation);
+                }
+                if (rand > 2f && rand <= 3f)
+                {
+                    Instantiate(floor3, floorpos.position, floorpos.rotation);
+                }
+                timetospawn = spawn;
+                rand2 = (int)Random.Range(0f, 10f);
+                if (rand2%2 == 1)
+                {
+                    ++holeaccumulator;
+                }
             }
-            if (rand > 1f && rand <= 2f)
+           else
             {
-                Instantiate(floor2, floorpos.position, floorpos.rotation);
+
+                holeemptier--;
+                if(holeemptier<=0)
+                {
+                    hole = false;
+                }
             }
-            if (rand > 2f && rand <= 3f)
+        }
+        if (holeaccumulator >= 15)
+        {
+            hole = true;
+            holeemptier = holeaccumulator;
+            holeaccumulator = 0;
+            rand2 = (int)Random.Range(0f, 10f);
+            if(rand2%3==1)
             {
-                Instantiate(floor3, floorpos.position, floorpos.rotation);
+                holeemptier *= 2;
             }
-            timetospawn = spawn;
+            if(rand2%3==2)
+            {
+                holeemptier *= 3;
+            }
         }
 	}
 }

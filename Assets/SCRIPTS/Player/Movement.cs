@@ -6,36 +6,42 @@ public class Movement : MonoBehaviour
 {
     public Text scoreText;
     public bool isGrounded;
-    private Vector2 gravity;
-    private Vector2 jumpForce;
-    public Vector2 movementSpeed;
+    public Vector3 gravity;
+    public Vector3 jumpForce;
+    public Vector3 movementSpeed;
     private Rigidbody rb;
     private CapsuleCollider c;
     private bool djump;
-    public bool touchJump;
-    public bool touchSlide;
+    private bool touchJump;
+    private bool touchSlide;
     private int score;
-    public Vector3 touchPosition;
-    Vector3 slideVector;
-    Vector3 standVector;
-    public AudioSource coinSound;
+    private Vector3 touchPosition;
+    private Vector3 slideVector;
+    private Vector3 standVector;
+    private AudioSource coinSound;
     public AudioClip coin;
+    private Vector3 rightLimits, leftLimits;
+    private Camera cam;
 
     // Use this for initialization
     void Start()
     {
+        cam = Camera.main;
         isGrounded = false;
-        gravity = new Vector2(0, -1);
-        jumpForce = -12 * gravity;
+        gravity = new Vector3(0, -1, 0);
+        jumpForce = -12f * gravity;
+        movementSpeed = new Vector3(15, 0, 0);
         rb = GetComponent<Rigidbody>();
         c = GetComponent<CapsuleCollider>();
         djump = false;
         score = 0;
         coinSound = GetComponent<AudioSource>();
         scoreText = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
+        leftLimits = cam.ScreenToWorldPoint(new Vector3(6 * Screen.width / 20, 0, 0));
+        rightLimits = cam.ScreenToWorldPoint(new Vector3(19 * Screen.width / 20, 0, 0));
+        rb.position = cam.ScreenToWorldPoint(new Vector3(14 * Screen.width / 20, Screen.height / 2, 1));
         //slideVector = c.size / 2;
         //standVector = c.size;
-
     }
 
     // Update is called once per frame
@@ -48,14 +54,33 @@ public class Movement : MonoBehaviour
         }
         jump();
         slide();
-        if (Input.GetKey(KeyCode.A))
+        if(!isGrounded)
         {
-            rb.velocity = new Vector3(-15, 0, 0);
+            rb.AddForce(gravity, ForceMode.Impulse);
+            Debug.Log(rb.velocity);
         }
-        if (isGrounded)
+        if(rb.position.x>=leftLimits.x && rb.position.x<=rightLimits.x)
         {
-            gravity = new Vector2(0, -1);
+            move();
         }
+        else
+        {
+            Vector3 position = rb.position;
+            if (rb.position.x < leftLimits.x)
+            {
+                position.x = leftLimits.x;
+                rb.position = position;
+            }
+            if (rb.position.x > rightLimits.x)
+            {
+                position.x = rightLimits.x;
+                rb.position = position;
+            }
+        }
+        //if (isGrounded)
+        //{
+        //    gravity = new Vector2(0, -1);
+        //}
     }
 
     void OnCollisionEnter(Collision col)
@@ -124,21 +149,22 @@ public class Movement : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.W) && isGrounded) || touchJump)
         {
             touchJump = false;
-            rb.AddForce(jumpForce, ForceMode.Impulse);
+            //rb.AddForce(jumpForce, ForceMode.Impulse);
+            rb.velocity = rb.velocity + (jumpForce * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.W) && !isGrounded && rb.velocity.y < 30)
-        {
-            gravity *= 1.02f;
-            rb.AddForce(5 * jumpForce, ForceMode.Acceleration);
-        }
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            gravity = new Vector2(0, -1);
-        }
-        if (!isGrounded)
-        {
-            rb.AddForce(gravity, ForceMode.Impulse);
-        }
+        //if (Input.GetKey(KeyCode.W) && !isGrounded && rb.velocity.y < 30)
+        //{
+        //    gravity *= 1.02f;
+        //    rb.AddForce(5 * jumpForce, ForceMode.Acceleration);
+        //}
+        //if (Input.GetKeyUp(KeyCode.W))
+        //{
+        //    gravity = new Vector2(0, -1);
+        //}
+        //if (!isGrounded)
+        //{
+        //    rb.AddForce(gravity, ForceMode.Impulse);
+        //}
         doublejump();
     }
 
@@ -159,12 +185,17 @@ public class Movement : MonoBehaviour
 
     void doublejump()
     {
-        if ((Input.GetKeyDown(KeyCode.W) && djump && !isGrounded) || touchJump)
-        {
-            touchJump = false;
-            rb.velocity = jumpForce * 0;
-            djump = false;
-            rb.AddForce(jumpForce * .9f, ForceMode.Impulse);
-        }
+        //if ((Input.GetKeyDown(KeyCode.W) && djump && !isGrounded) || touchJump)
+        //{
+        //    touchJump = false;
+        //    rb.velocity = jumpForce * 0;
+        //    djump = false;
+        //    rb.AddForce(jumpForce * .9f, ForceMode.Impulse);
+        //}
+    }
+
+    void move()
+    {
+        rb.velocity = Input.GetAxis("Horizontal") * movementSpeed;
     }
 }
