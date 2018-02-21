@@ -8,6 +8,8 @@ TagManager:
   - boundary
   - Coin
   - Score
+  - LavaDummy
+  - LavaRock
   layers:
   - Default
   - TransparentFX

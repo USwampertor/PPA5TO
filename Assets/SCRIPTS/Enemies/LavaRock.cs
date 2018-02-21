@@ -8,16 +8,34 @@ public class LavaRock : MonoBehaviour {
     public float tumble;
     public GameObject lavaSpot;
     public Texture lava;
-    float speed=3;
+    float speed=9;
+    public bool nextRock=false;
     void Start()
     {
-       // rigidbody.angularVelocity = Random.insideUnitSphere * tumble;
-        
+        if (gameObject.tag == "LavaRock")
+        {
+            LavaDrop();
+        }
+        else if (gameObject.tag == "LavaDummy")
+        {
+            LavaThrow();
+        }
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update ()
+    {
+        
+    }
+
+    void LavaDrop()
+    {
         GetComponent<Rigidbody>().velocity = new Vector2(0, -1) * speed;
+    }
+
+    void LavaThrow()
+    {
+        GetComponent<Rigidbody>().velocity = new Vector2(0, 1) * speed;
     }
 
     void OnCollisionEnter(Collision other)
@@ -35,6 +53,17 @@ public class LavaRock : MonoBehaviour {
             Destroy(gameObject);
             Destroy(other.gameObject);
         }
+        else if (other.gameObject.tag == "boundary")
+        {
+            
+            if (gameObject.tag == "LavaDummy")
+            {                
+                Destroy(gameObject);
+            }
+                
+        }
+
+        
         //Destroy(other.gameObject);
         //Destroy(gameObject);
     }
