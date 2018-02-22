@@ -550,6 +550,12 @@ Prefab:
       propertyPath: m_Name
       value: volcanosprite
       objectReference: {fileID: 0}
+    - target: {fileID: 114174705106517082, guid: 66df6da9d7738174cbded493464c37d7,
+        type: 2}
+      propertyPath: lavaDummy
+      value: 
+      objectReference: {fileID: 1422689145599514, guid: 40fc29a894a20064d8fe7739041d634e,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 66df6da9d7738174cbded493464c37d7, type: 2}
   m_IsPrefabParent: 0
