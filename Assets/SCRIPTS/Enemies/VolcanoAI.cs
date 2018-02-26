@@ -12,7 +12,7 @@ public class VolcanoAI : MonoBehaviour {
     public float startWait;
     public float waveWait;
     //bool nextrock;
-    int nextRock=0;
+    int nextRock = 0;
     void Start()
     {
         StartCoroutine(SpawnWaves());

@@ -7,8 +7,11 @@ public class plataformspawner : MonoBehaviour {
     public GameObject plat1, plat2, plat3,coin;
     public float timetospawnp = 0;
     float randp,randcoin;
-    Vector3 v1 = new Vector3(0, 2, 0);
-    Vector3 v3 = new Vector3(0, -2, 0);
+    private Vector3 v;
+    private GameObject plat;
+    public Vector3 v1 = new Vector3(0, 2, 0);
+    public Vector3 v2 = new Vector3(0, 0, 0);
+    public Vector3 v3 = new Vector3(0, -2, 0);
     // Update is called once per frame
     void Start()
     {
@@ -22,35 +25,41 @@ public class plataformspawner : MonoBehaviour {
         
         if (timetospawnp < 0.1f)
         {
-            randp = Random.Range(0f, 3f);
-            int iRandPlatformer = (int)randp;
-            randcoin= Random.Range(1f, 3f);
-            int iRandCoin = (int)randcoin;
-            switch (iRandPlatformer)
-            {
-                case 1:
-                    Instantiate(plat1, centralplat.position + v1, centralplat.rotation);
-                    //for (float coinSpawner = 0f; coinSpawner < iRandCoin; ++coinSpawner) 
-                    //{
-                        Instantiate(coin, centralplat.position + v1+new Vector3(0,2,0), centralplat.rotation);
-                    //}
-                    break;
-                case 2:
-                    Instantiate(plat2, centralplat.position, centralplat.rotation);
-                    //for (float coinSpawner = 0f; coinSpawner < iRandCoin; ++coinSpawner) 
-                    //{
-                        Instantiate(coin, centralplat.position + new Vector3(0, 2, 0), centralplat.rotation);
-                    //}
-                    break;
-                case 3:
-                    Instantiate(plat3, centralplat.position + v3, centralplat.rotation);
-                    //for (float coinSpawner = 0f; coinSpawner < iRandCoin; ++coinSpawner) 
-                    //{
-                        Instantiate(coin, centralplat.position + v3 + new Vector3(0, 2, 0), centralplat.rotation);
-                    //}
-                    break;
-            }
+            CreatePlataform();
             timetospawnp = Random.Range(1f, 2f);
         }
+    }
+    void CreatePlataform()
+    {
+        
+        int iRandVector = (int)Random.Range(1f, 4f);
+        int iRandTexture = (int)Random.Range(1f, 4f);
+        switch (iRandVector)
+        {
+            case 1:
+                v = v1;
+                break;
+            case 2:
+                v = v2;
+                break;
+            case 3:
+                v = v3;
+                break;  
+        }
+        switch(iRandTexture)
+        {
+            case 1:
+                plat = plat1;
+                break;
+            case 2:
+                plat = plat2;
+                break;
+            case 3:
+                plat = plat3;
+                break;
+        }
+        //Debug.Log("Genere una plataforma"+ iRandVector);
+        Instantiate(plat, centralplat.position+v, centralplat.rotation);
+        Instantiate(coin, centralplat.position+v + new Vector3(0, 2, 0), centralplat.rotation);
     }
 }

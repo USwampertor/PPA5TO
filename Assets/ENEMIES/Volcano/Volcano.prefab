@@ -82,11 +82,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hazard: {fileID: 1966631698765010, guid: b021f26b758e898459dd74e847e37fe8, type: 2}
+  lavaDummy: {fileID: 0}
   spawnValues: {x: 11, y: 7, z: 1}
-  hazardCount: 0
-  spawnWait: 0
-  startWait: 0
-  waveWait: 0
+  hazardCount: 1
+  spawnWait: 1.5
+  startWait: 1
+  waveWait: 2
 --- !u!212 &212663463491218778
 SpriteRenderer:
   m_ObjectHideFlags: 1

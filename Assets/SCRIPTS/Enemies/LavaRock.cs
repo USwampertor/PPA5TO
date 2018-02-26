@@ -8,7 +8,7 @@ public class LavaRock : MonoBehaviour {
     public float tumble;
     public GameObject lavaSpot;
     public Texture lava;
-    float speed=9;
+    float speed=6;
     public bool nextRock=false;
     void Start()
     {
@@ -43,16 +43,25 @@ public class LavaRock : MonoBehaviour {
         if (other.gameObject.tag == "Ground")
         {
             Destroy(gameObject);
-           //other.gameObject.GetComponent<Material>().SetTexture("lavaSpot", lava);
-            //Vector3 spawnPosition = new Vector3(other.transform.position.x, other.transform.position.y, 0.4f);
-            //Quaternion spawnRotation = Quaternion.identity;
-            //Instantiate(lavaSpot, spawnPosition, spawnRotation);
+          
+            Vector3 spawnPosition = new Vector3(transform.position.x, -5.5f, 0.5f);
+            Quaternion spawnRotation = Quaternion.identity;
+            Instantiate(lavaSpot, spawnPosition, spawnRotation);
+        }
+        else if (other.gameObject.tag == "Platform")
+        {
+            Destroy(gameObject);
+
+            Vector3 spawnPosition = new Vector3(transform.position.x, (transform.position.y-2.38f), 0.2f);
+            Quaternion spawnRotation = Quaternion.identity;
+            Instantiate(lavaSpot, spawnPosition, spawnRotation);
         }
         else if (other.gameObject.tag == "Player")
         {
             Destroy(gameObject);
             Destroy(other.gameObject);
         }
+
         else if (other.gameObject.tag == "boundary")
         {
             

@@ -5,10 +5,11 @@ using UnityEngine;
 public class floorspawner : MonoBehaviour {
     public Transform floorpos;
     public GameObject floor,floor2,floor3;
-    public float timetospawn=0;
+    private float timetospawn=0;
     public float spawn;
     float rand;
-    public int holeaccumulator = 0,rand2=0,holeemptier=0;
+    public int maxforhole;
+    public int holeaccumulator = 0; private int rand2=0,holeemptier=0;
     public bool hole = false;
     // Update is called once per frame
     void Start()
@@ -51,13 +52,14 @@ public class floorspawner : MonoBehaviour {
                 if(holeemptier<=0)
                 {
                     hole = false;
+                    holeaccumulator = (int)Random.Range(0f, 10f);
                 }
             }
         }
-        if (holeaccumulator >= 15)
+        if (holeaccumulator >= maxforhole)
         {
             hole = true;
-            holeemptier = holeaccumulator;
+            holeemptier = (int)Random.Range(8, 12);
             holeaccumulator = 0;
             rand2 = (int)Random.Range(0f, 10f);
             if(rand2%3==1)
