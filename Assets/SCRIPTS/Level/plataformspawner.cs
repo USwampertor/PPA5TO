@@ -41,7 +41,7 @@ public class plataformspawner : MonoBehaviour {
             CreateSpecialPlataform();
             stacker = Random.Range(0f,3f);
         }
-        if(Character.GetComponent<CapsuleCollider>.()==null)
+
     }
     void CreatePlataform()
     {
