@@ -52,7 +52,7 @@ public class LavaRock : MonoBehaviour {
         {
             Destroy(gameObject);
 
-            Vector3 spawnPosition = new Vector3(transform.position.x, (transform.position.y-2.38f), 0.2f);
+            Vector3 spawnPosition = new Vector3(other.transform.position.x, (other.transform.position.y+1.2f), other.transform.position.z/2);
             Quaternion spawnRotation = Quaternion.identity;
             Instantiate(lavaSpot, spawnPosition, spawnRotation);
         }

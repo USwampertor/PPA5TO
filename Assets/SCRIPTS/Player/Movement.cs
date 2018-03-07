@@ -28,8 +28,8 @@ public class Movement : MonoBehaviour
     {
         cam = Camera.main;
         isGrounded = false;
-        gravity = new Vector3(0, -1, 0);
-        jumpForce = -12f * gravity;
+        gravity = new Vector3(0, -15, 0);
+        jumpForce = -8/15f * gravity;
         movementSpeed = new Vector3(15, 0, 0);
         rb = GetComponent<Rigidbody>();
         c = GetComponent<CapsuleCollider>();
@@ -45,8 +45,9 @@ public class Movement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        Debug.Log(rb.velocity);
         scoreText.text = "Score: " + score;
         if (Input.touchCount > 0)
         {
@@ -54,12 +55,10 @@ public class Movement : MonoBehaviour
         }
         jump();
         slide();
-        if(!isGrounded)
-        {
-            rb.AddForce(gravity, ForceMode.Impulse);
-            Debug.Log(rb.velocity);
-        }
-        if(rb.position.x>=leftLimits.x && rb.position.x<=rightLimits.x)
+        //rb.AddForce(gravity, ForceMode.Impulse);
+        rb.AddForce(new Vector3(rb.velocity.x, rb.velocity.y + gravity.y * Time.deltaTime, rb.velocity.z), ForceMode.VelocityChange);
+        //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + gravity.y * (Time.deltaTime * Time.deltaTime), rb.velocity.z);
+        if (rb.position.x >= leftLimits.x && rb.position.x <= rightLimits.x)
         {
             move();
         }
@@ -108,6 +107,10 @@ public class Movement : MonoBehaviour
             coinSound.PlayOneShot(coin);
             score++;
         }
+        if(other.tag=="Ground")
+        {
+            isGrounded = false;
+        }
     }
 
     //void OnCollisionStay(Collision col)
@@ -116,14 +119,14 @@ public class Movement : MonoBehaviour
     //        isGrounded = true;
     //}
 
-    void OnCollisionExit(Collision col)
-    {
-        //if (col.gameObject.tag == "Ground")
-        //{
-        isGrounded = false;
-        djump = true;
-        //}
-    }
+    //void OnCollisionExit(Collision col)
+    //{
+    //    //if (col.gameObject.tag == "Ground" || col.gameObject.tag == "Platform")
+    //    //{
+    //        isGrounded = false;
+    //        djump = true;
+    //    //}
+    //}
 
     void checkTouchInput()
     {
@@ -148,9 +151,10 @@ public class Movement : MonoBehaviour
     {
         if ((Input.GetKeyDown(KeyCode.W) && isGrounded) || touchJump)
         {
+            isGrounded = false;
             touchJump = false;
-            //rb.AddForce(jumpForce, ForceMode.Impulse);
-            rb.velocity = rb.velocity + (jumpForce * Time.deltaTime);
+            rb.AddForce(jumpForce, ForceMode.Impulse);
+            //rb.AddForce(new Vector3(rb.velocity.x, rb.velocity.y + jumpForce.y * Time.deltaTime, rb.velocity.z), ForceMode.VelocityChange);
         }
         //if (Input.GetKey(KeyCode.W) && !isGrounded && rb.velocity.y < 30)
         //{
@@ -185,13 +189,13 @@ public class Movement : MonoBehaviour
 
     void doublejump()
     {
-        //if ((Input.GetKeyDown(KeyCode.W) && djump && !isGrounded) || touchJump)
-        //{
-        //    touchJump = false;
-        //    rb.velocity = jumpForce * 0;
-        //    djump = false;
-        //    rb.AddForce(jumpForce * .9f, ForceMode.Impulse);
-        //}
+        if ((Input.GetKeyDown(KeyCode.W) && djump && !isGrounded) || touchJump)
+        {
+            touchJump = false;
+            rb.velocity = jumpForce * 0;
+            djump = false;
+            rb.AddForce(jumpForce * .9f, ForceMode.Impulse);
+        }
     }
 
     void move()

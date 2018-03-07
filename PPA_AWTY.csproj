@@ -302,6 +302,7 @@
     <Compile Include="Assets\SCRIPTS\Level\assetdestroyer.cs" />
     <Compile Include="Assets\SCRIPTS\Level\assetspawner.cs" />
     <Compile Include="Assets\SCRIPTS\Level\BGscroller.cs" />
+    <Compile Include="Assets\SCRIPTS\Level\EnemySpawner.cs" />
     <Compile Include="Assets\SCRIPTS\Level\floordestroyer.cs" />
     <Compile Include="Assets\SCRIPTS\Level\floorspawner.cs" />
     <Compile Include="Assets\SCRIPTS\Level\moon.cs" />
@@ -310,7 +311,6 @@
     <Compile Include="Assets\SCRIPTS\Level\sun.cs" />
     <Compile Include="Assets\SCRIPTS\Level\treedestroyer.cs" />
     <Compile Include="Assets\SCRIPTS\Level\treespawner.cs" />
-    <Compile Include="Assets\SCRIPTS\Player\Mario.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Movement.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Movement_2.cs" />
     <Compile Include="Assets\SCRIPTS\randomtexture.cs" />

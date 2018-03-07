@@ -9,7 +9,8 @@ public class floorspawner : MonoBehaviour {
     public float spawn;
     float rand;
     public int maxforhole;
-    public int holeaccumulator = 0; private int rand2=0,holeemptier=0;
+    public int holeaccumulator = 0;
+    private int rand2=0,holeemptier=0;
     public bool hole = false;
     // Update is called once per frame
     void Start()
