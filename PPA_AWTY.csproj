@@ -317,6 +317,7 @@
     <Compile Include="Assets\SCRIPTS\score_manager.cs" />
     <Compile Include="Assets\SCRIPTS\UI\inicio.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Menu_de_Objetos.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Objeto_estatico.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

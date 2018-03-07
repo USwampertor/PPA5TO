@@ -5,6 +5,7 @@ using UnityEngine;
 public class plataformspawner : MonoBehaviour {
     public Transform centralplat;
     public GameObject Character, plat1, plat2, plat3,coin;
+    Movement aliveChecker;
     public float timetospawnp = 0;
     float randp,randcoin;
     CapsuleCollider Checker;
@@ -18,13 +19,14 @@ public class plataformspawner : MonoBehaviour {
     // Update is called once per frame
     void Start()
     {
+        aliveChecker = Character.GetComponent<Movement>();
         Checker = Character.GetComponent<CapsuleCollider>();
         timetospawnp = Random.Range(0f, 2f);
     }
    
     void Update()
     {
-
+        
         timetospawnp -= Time.deltaTime;
         
         if (timetospawnp < 0.1f)
@@ -32,7 +34,7 @@ public class plataformspawner : MonoBehaviour {
             CreatePlataform();
             timetospawnp = Random.Range(1f, 2f);
         }
-        if (Checker.gameObject.transform.position.y < -2)
+        if (aliveChecker.isAlive == true && Checker.gameObject.transform.position.y < -2)
         {
             stacker += Time.deltaTime;
         }
@@ -41,7 +43,6 @@ public class plataformspawner : MonoBehaviour {
             CreateSpecialPlataform();
             stacker = Random.Range(0f,3f);
         }
-
     }
     void CreatePlataform()
     {

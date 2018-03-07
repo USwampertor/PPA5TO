@@ -11,8 +11,9 @@ public class Movement : MonoBehaviour
     public Vector3 movementSpeed;
     private Rigidbody rb;
     private CapsuleCollider c;
-    private bool djump;
+    public bool djump;
     private bool touchJump;
+    private bool touchDJump;
     private bool touchSlide;
     private int score;
     private Vector3 touchPosition;
@@ -22,6 +23,7 @@ public class Movement : MonoBehaviour
     public AudioClip coin;
     private Vector3 rightLimits, leftLimits;
     private Camera cam;
+    public bool isAlive;
 
     // Use this for initialization
     void Start()
@@ -29,7 +31,7 @@ public class Movement : MonoBehaviour
         cam = Camera.main;
         isGrounded = false;
         gravity = new Vector3(0, -15, 0);
-        jumpForce = -8/15f * gravity;
+        jumpForce = -10/15f * gravity;
         movementSpeed = new Vector3(15, 0, 0);
         rb = GetComponent<Rigidbody>();
         c = GetComponent<CapsuleCollider>();
@@ -40,6 +42,7 @@ public class Movement : MonoBehaviour
         leftLimits = cam.ScreenToWorldPoint(new Vector3(6 * Screen.width / 20, 0, 0));
         rightLimits = cam.ScreenToWorldPoint(new Vector3(19 * Screen.width / 20, 0, 0));
         rb.position = cam.ScreenToWorldPoint(new Vector3(14 * Screen.width / 20, Screen.height / 2, 1));
+        isAlive = true;
         //slideVector = c.size / 2;
         //standVector = c.size;
     }
@@ -69,11 +72,13 @@ public class Movement : MonoBehaviour
             {
                 position.x = leftLimits.x;
                 rb.position = position;
+                rb.velocity *= 0f;
             }
             if (rb.position.x > rightLimits.x)
             {
                 position.x = rightLimits.x;
                 rb.position = position;
+                rb.velocity *= 0f;
             }
         }
         //if (isGrounded)
@@ -96,6 +101,8 @@ public class Movement : MonoBehaviour
         if ((this.transform.position.y - col.transform.position.y) > 0)
         {
             isGrounded = true;
+            djump = false;
+            touchDJump = false;
         }
     }
 
@@ -111,6 +118,11 @@ public class Movement : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    void OnDestroy()
+    {
+        isAlive = false;
     }
 
     //void OnCollisionStay(Collision col)
@@ -130,31 +142,35 @@ public class Movement : MonoBehaviour
 
     void checkTouchInput()
     {
-    //    if (Input.GetTouch(0).phase == TouchPhase.Began)
-    //    {
-    //        touchPosition = Input.GetTouch(0).position;
-    //    }
-    //    if (Input.GetTouch(0).phase == TouchPhase.Ended || Input.GetTouch(0).phase == TouchPhase.Canceled)
-    //    {
-    //        if (Input.GetTouch(0).position.y > touchPosition.y)
-    //        {
-    //            touchJump = true;
-    //        }
-    //        if (Input.GetTouch(0).position.y < touchPosition.y)
-    //        {
-    //            touchSlide = true;
-    //        }
-    //    }
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            touchPosition = Input.GetTouch(0).position;
+        }
+        if (Input.GetTouch(0).phase == TouchPhase.Ended || Input.GetTouch(0).phase == TouchPhase.Canceled)
+        {
+            if (Input.GetTouch(0).position.y > touchPosition.y)
+            {
+                touchJump = true;
+            }
+            //if (Input.GetTouch(0).position.y < touchPosition.y)
+            //{
+            //    touchSlide = true;
+            //}
+        }
     }
 
     void jump()
     {
-        if ((Input.GetKeyDown(KeyCode.W) && isGrounded) || touchJump)
+        if ((Input.GetKey(KeyCode.W) && isGrounded) || (touchJump && isGrounded))
         {
             isGrounded = false;
             touchJump = false;
             rb.AddForce(jumpForce, ForceMode.Impulse);
             //rb.AddForce(new Vector3(rb.velocity.x, rb.velocity.y + jumpForce.y * Time.deltaTime, rb.velocity.z), ForceMode.VelocityChange);
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                djump = true;
+            }
         }
         //if (Input.GetKey(KeyCode.W) && !isGrounded && rb.velocity.y < 30)
         //{
@@ -169,7 +185,7 @@ public class Movement : MonoBehaviour
         //{
         //    rb.AddForce(gravity, ForceMode.Impulse);
         //}
-        doublejump();
+        //doublejump();
     }
 
     void slide()
@@ -189,12 +205,18 @@ public class Movement : MonoBehaviour
 
     void doublejump()
     {
-        if ((Input.GetKeyDown(KeyCode.W) && djump && !isGrounded) || touchJump)
+        if ((Input.GetKey(KeyCode.W) && djump) || touchDJump)
         {
             touchJump = false;
             rb.velocity = jumpForce * 0;
             djump = false;
+            touchDJump = false;
             rb.AddForce(jumpForce * .9f, ForceMode.Impulse);
+            if (Input.GetKeyUp(KeyCode.W) || touchDJump)
+            {
+                djump = false;
+                touchDJump = false;
+            }
         }
     }
 
