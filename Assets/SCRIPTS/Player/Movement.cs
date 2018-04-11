@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
         cam = Camera.main;
         isGrounded = false;
         gravity = new Vector3(0, -15, 0);
-        jumpForce = -10/15f * gravity;
+        jumpForce = -9/15f * gravity;
         movementSpeed = new Vector3(15, 0, 0);
         rb = GetComponent<Rigidbody>();
         c = GetComponent<CapsuleCollider>();
@@ -50,7 +50,6 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Debug.Log(rb.velocity);
         scoreText.text = "Score: " + score;
         if (Input.touchCount > 0)
         {
@@ -80,6 +79,12 @@ public class Movement : MonoBehaviour
                 rb.position = position;
                 rb.velocity *= 0f;
             }
+        }
+        if (rb.velocity.y > 9.0f)
+        {
+            float newVel;
+            newVel = -rb.velocity.y;
+            rb.AddForce(new Vector3(rb.velocity.x, newVel, rb.velocity.z));
         }
         //if (isGrounded)
         //{
@@ -165,12 +170,11 @@ public class Movement : MonoBehaviour
         {
             isGrounded = false;
             touchJump = false;
-            rb.AddForce(jumpForce, ForceMode.Impulse);
-            //rb.AddForce(new Vector3(rb.velocity.x, rb.velocity.y + jumpForce.y * Time.deltaTime, rb.velocity.z), ForceMode.VelocityChange);
-            if (Input.GetKeyUp(KeyCode.W))
-            {
-                djump = true;
-            }
+            rb.AddForce(new Vector3(rb.velocity.x, rb.velocity.y + jumpForce.y, rb.velocity.z), ForceMode.Impulse);
+            //if (Input.GetKeyUp(KeyCode.W))
+            //{
+            //    djump = true;
+            //}
         }
         //if (Input.GetKey(KeyCode.W) && !isGrounded && rb.velocity.y < 30)
         //{
